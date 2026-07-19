@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 # ANSI escape codes to control the terminal behavior
-# depends on
-# github.com/glaudiston/pragma_once: optional to avoid multiple sourcing overhead.
-#
-source $(dirname $(realpath $BASH_SOURCE))/pragma_once/bash/pragma_once.sh && return 0;
 
 TERM_CSI_PREFIX="\e[" # Control Sequence Indroducer
 TERM_PRIVATE="?" # private because it was vendor specific, but it is widely adopted.
