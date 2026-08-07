@@ -51,6 +51,8 @@ TERM_CURSOR_SAVE="${TERM_CSI_PREFIX}s"
 TERM_CURSOR_RESTOR="${TERM_CSI_PREFIX}u"
 TERM_MOVE_HOME="${TERM_CSI_PREFIX}${TERM_CURSOR_POSITION}"
 term_move(){
+(
+	flock -x 200 # mutex_lock
 	local direction=$1;
 	local steps=${2:-1}
 	case ${direction,,} in
@@ -69,9 +71,11 @@ term_move(){
 		*)
 			local row=$1
 			local col=$2
-			printf "${TERM_CSI_PREFIX}${row};${col}${TERM_CURSOR_POSITION}"
+			echo -ne "${TERM_CSI_PREFIX}${col};${row}${TERM_CURSOR_POSITION}"
 			;;
 	esac
+	flock -u 200 # mutex_unlock
+) 200>/dev/shm/term_$PPID.lock
 }
 
 # Scrolling and framing
