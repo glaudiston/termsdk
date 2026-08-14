@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # ANSI escape codes to control the terminal behavior
 
+[ -d /dev/shm ] && SHM_DIR=/dev/shm || SHM_DIR=/tmp
+
 TERM_CSI_PREFIX="\e[" # Control Sequence Indroducer
 TERM_PRIVATE="?" # private because it was vendor specific, but it is widely adopted.
 TERM_PARAM_ON=h
@@ -75,7 +77,7 @@ term_move(){
 			;;
 	esac
 	flock -u 200 # mutex_unlock
-) 200>/dev/shm/term_$PPID.lock
+) 200>"${SHM_DIR}/term_$PPID.lock"
 }
 
 # Scrolling and framing
